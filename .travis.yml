@@ -1,6 +1,16 @@
 language: c
 dist: xenial
-before_install: sudo apt-get install -y phoronix-test-suite
-script:
-  - PTS_SILENT_MODE=1 phoronix-test-suite benchmark pts/compilation
-  - PTS_SILENT_MODE=1 phoronix-test-suite benchmark pts/database
+env:
+  matrix:
+    - TEST=pts/pgbench
+    - TEST=pts/build-linux-kernel
+before_install:
+  - curl -O https://phoronix-test-suite.com/releases/repo/pts.debian/files/phoronix-test-suite_8.4.1_all.deb
+install: 
+  - sudo apt-get install -y gdebi-core libssl-dev
+  - sudo gdebi -n phoronix-test-suite_8.4.1_all.deb
+  - sudo phoronix-test-suite batch-install "${TEST}"
+  - sudo mkdir -p /var/lib/phoronix-test-suite/test-profiles/pts/pgbench-1.8.6/
+  - sudo cp test-definition.xml /var/lib/phoronix-test-suite/test-profiles/pts/pgbench-1.8.6/
+before_script: sudo cp phoronix-test-suite.xml /etc/phoronix-test-suite.xml
+script: travis_wait 50 sudo PTS_SILENT_MODE=1 phoronix-test-suite batch-run "${TEST}"
