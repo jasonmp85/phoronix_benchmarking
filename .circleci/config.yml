@@ -1,0 +1,18 @@
+version: 2
+jobs:
+  pgbench:
+    docker:
+      - image: jasonmp85/phoronix-tester:latest
+    steps:
+      - run: /usr/bin/phoronix-test-suite batch-run pts/pgbench
+  build-linux-kernel:
+    docker:
+      - image: jasonmp85/phoronix-tester:latest
+    steps:
+      - run: /usr/bin/phoronix-test-suite batch-run pts/build-linux-kernel
+workflows:
+  version: 2
+  benchmark:
+    jobs:
+      - pgbench
+      - build-linux-kernel

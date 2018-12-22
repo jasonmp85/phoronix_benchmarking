@@ -4,11 +4,11 @@ workflow "Benchmark" {
 }
 
 action "pgbench" {
-  uses = "jasonmp85/phoronix_benchmarking@master"
+  uses = "docker://jasonmp85/phoronix-tester:latest"
   args = "pts/pgbench"
 }
 
 action "build-linux-kernel" {
-  uses = "jasonmp85/phoronix_benchmarking@master"
+  uses = "docker://jasonmp85/phoronix-tester:latest"
   args = "pts/build-linux-kernel"
 }
