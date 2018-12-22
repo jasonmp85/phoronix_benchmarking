@@ -1,0 +1,6 @@
+language: c
+dist: xenial
+before_install: sudo apt-get install -y phoronix-test-suite
+script:
+  - phoronix-test-suite benchmark pts/compilation
+  - phoronix-test-suite benchmark pts/database
